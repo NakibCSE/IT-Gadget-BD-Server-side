@@ -47,6 +47,73 @@ async function run() {
       const products = await advertiseCollection.find(query).toArray();
       res.send(products);
     });
+    // get method for orders
+    app.get("/myOrders", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const bookings = await bookingCollection.find(query).toArray();
+      res.send(bookings);
+    });
+
+    // get method for users
+    app.get("/users", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const users = await userCollection.find(query).toArray();
+      res.send(users);
+    });
+    // get method for users
+    app.get("/buyers", async (req, res) => {
+      const role = req.query.role;
+      const query = { role: role };
+      const users = await userCollection.find(query).toArray();
+      res.send(users);
+    });
+    // jwt method for
+    app.get("/jwt", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const user = await userCollection.findOne(query);
+      if (user) {
+        const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, {
+          expiresIn: "1d",
+        });
+        return res.send({ accessToken: token });
+      }
+      res.status(403).send({ accessToken: "" });
+    });
+
+    // post for add product
+    app.post("/addProduct", async (req, res) => {
+      const review = req.body;
+      const result = await laptopCollection.insertOne(review);
+      res.send(result);
+    });
+    app.get("/users/admin/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const user = await userCollection.findOne(query);
+      res.send({ isAdmin: user?.role === "admin" });
+    });
+    app.delete("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const result = await laptopCollection.deleteOne(filter);
+      res.send(result);
+    });
+    app.delete("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const result = await userCollection.deleteOne(filter);
+      res.send(result);
+    });
+
+    // post for users method
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const result = await userCollection.insertOne(user);
+      res.send(result);
+    });
     // post method for report item
     app.post("/report", async (req, res) => {
       const report = req.body;
