@@ -29,6 +29,18 @@ async function run() {
       const result = await laptopCollection.find(query).toArray();
       res.send(result);
     });
+    app.get("/category", async (req, res) => {
+      const category = req.query.category;
+      const query = { category: category };
+      const result = await laptopCollection.find(query).toArray();
+      res.send(result);
+    });
+    // post method for report item
+    app.post("/report", async (req, res) => {
+      const report = req.body;
+      const result = await reportCollection.insertOne(report);
+      res.send(result);
+    });
   } finally {
   }
 }
