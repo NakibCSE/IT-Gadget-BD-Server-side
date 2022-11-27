@@ -35,6 +35,18 @@ async function run() {
       const result = await laptopCollection.find(query).toArray();
       res.send(result);
     });
+    // post method for bookings
+    app.post("/bookings", async (req, res) => {
+      const booking = req.body;
+      const result = await bookingCollection.insertOne(booking);
+      res.send(result);
+    });
+    // get method for advertise
+    app.get("/advertise", async (req, res) => {
+      const query = {};
+      const products = await advertiseCollection.find(query).toArray();
+      res.send(products);
+    });
     // post method for report item
     app.post("/report", async (req, res) => {
       const report = req.body;
