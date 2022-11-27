@@ -17,7 +17,11 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    const laptopCollection = client.db("categories").collection("category");
+    const laptopCollection = client.db("laptops").collection("category");
+    const bookingCollection = client.db("laptops").collection("bookings");
+    const userCollection = client.db("laptops").collection("users");
+    const advertiseCollection = client.db("laptops").collection("advertise");
+    const reportCollection = client.db("laptops").collection("report");
 
     app.get("/category/:id", async (req, res) => {
       const id = req.params.id;
